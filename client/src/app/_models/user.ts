@@ -1,4 +1,5 @@
 export interface User{
-    userName:object;
-    token:object;
+    username:string;
+    token:string;
+    photoUrl:string;
 }
