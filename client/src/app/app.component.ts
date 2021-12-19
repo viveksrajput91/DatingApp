@@ -27,10 +27,10 @@ export class AppComponent implements OnInit {
     const user:User= JSON.parse(storedUser);
     this.accountService.SetCurrentUser(user);
     }
-    else
-    {
-      this.accountService.SetCurrentUser(undefined);
-    }
+    // else
+    // {
+    //   this.accountService.SetCurrentUser(undefined);
+    // }
   }
 
 }
