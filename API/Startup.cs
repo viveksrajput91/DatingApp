@@ -22,6 +22,8 @@ using System.Text;
 using API.MiddleWare;
 using API.Helpers;
 using AutoMapper;
+using API.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace API
 {
@@ -37,11 +39,21 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentityCore<AppUser>(options=>{
+                    options.Password.RequireNonAlphanumeric=false;
+                })
+                .AddRoles<AppRole>().AddRoleManager<RoleManager<AppRole>>()
+                .AddRoleValidator<RoleValidator<AppRole>>().AddSignInManager<SignInManager<AppUser>>()
+                .AddEntityFrameworkStores<DataContext>();
+                
             services.AddScoped<IPhotoService,PhotoService>();
             services.Configure<CloudinarySettings>(_config.GetSection("cloudinarySettings"));
             services.AddScoped<ITokenService,TokenService>();
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+            services.AddScoped<LogUserActivity>();
+            services.AddScoped<ILikesRepository,LikesRepository>();
+            services.AddScoped<IMessageRepository,MessageRepository>();
               
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -63,6 +75,11 @@ namespace API
                     ValidateIssuer=false,
                     ValidateAudience=false                    
                 };
+            });
+
+            services.AddAuthorization(options => {
+                options.AddPolicy("UserWithAdminRolePolicy",buildPolicy=>buildPolicy.RequireRole("Admin"));
+                options.AddPolicy("UserWithAdminModeratorRolePolicy",builderPolicy=>builderPolicy.RequireRole("Admin","Moderator"));
             });
         }
 

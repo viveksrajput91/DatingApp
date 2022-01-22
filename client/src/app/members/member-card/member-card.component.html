@@ -8,12 +8,12 @@
                 </button>
             </li>
             <li class="list-inline-item">
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" (click)="addLikes(member)">
                     <i class="fa fa-heart"></i>
                 </button>
             </li>
             <li class="list-inline-item">
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" routerLink="/members/{{member.userName}}" [queryParams]="{tab:3}">
                     <li class="fa fa-envelope"></li>
                 </button>
             </li>
@@ -21,7 +21,7 @@
     </div>
     <div class="card-body p1">
         <h6 class="text-center card-title mb-1"><i class="fa fa-user mr-2"></i>
-        {{member.knownAs}}
+        {{member.knownAs}}, {{member.age}}
         </h6>
         <p class="card-text text-center text-muted">{{member.city}}</p>
     </div>
